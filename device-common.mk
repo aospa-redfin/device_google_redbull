@@ -1014,3 +1014,7 @@ include hardware/google/pixel/citadel/citadel.mk
 # Pixel Logger
 include hardware/google/pixel/PixelLogger/PixelLogger.mk
 #################################################################################
+
+# Soong Namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    packages/modules/Bluetooth/android/app
