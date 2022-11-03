@@ -13,6 +13,9 @@ BOARD_SEPOLICY_DIRS += hardware/google/pixel-sepolicy/input
 # google_battery service
 BOARD_SEPOLICY_DIRS += hardware/google/pixel-sepolicy/googlebattery
 
+# connectivity thermal power manager service
+BOARD_SEPOLICY_DIRS += hardware/google/pixel-sepolicy/connectivity_thermal_power_manager
+
 # vendors
 BOARD_SEPOLICY_DIRS += device/google/redbull/sepolicy/vendor/google
 BOARD_SEPOLICY_DIRS += device/google/redbull/sepolicy/vendor/qcom/common
