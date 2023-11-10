@@ -510,6 +510,9 @@ BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 
 -include device/google/redbull/soong/pixel_soong_config.mk
 
+# Allow building duplicate targets
+BUILD_BROKEN_DUP_RULES := true
+
 # List of modules that should not load automatically
 PRODUCT_COPY_FILES += \
     device/google/redbull/modules.blocklist:$(TARGET_COPY_OUT_VENDOR)/lib/modules/modules.blocklist \
