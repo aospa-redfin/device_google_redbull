@@ -3,7 +3,11 @@ DEVICE_PACKAGE_OVERLAYS += device/google/redbull/overlay-calyx
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/commonsys-intf/display \
-    vendor/qcom/opensource/display
+    vendor/qcom/opensource/display 
+
+# NFC
+$(call inherit-product, hardware/st/nfc/nfc_vendor_product.mk)
+TARGET_USES_ST_AIDL_NFC := true
 
 # EUICC
 PRODUCT_COPY_FILES += \
@@ -14,22 +18,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/google/redbull/permissions/permissions_com.android.hbmsvmanager.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/permissions_com.android.hbmsvmanager.xml
 
-TARGET_PREBUILT_KERNEL := device/google/redbull-kernel/vintf/Image.lz4
-
-# Lineage Health
-include hardware/google/pixel/lineage_health/device.mk
-
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sdm
+TARGET_PREBUILT_KERNEL := device/google/redbull-kernel/Image.lz4
 
 # RCS
 PRODUCT_PACKAGES += \
     PresencePolling \
     RcsService
-
-# Touch
-include hardware/google/pixel/touch/device.mk
 
 # Build necessary packages for system_ext
 

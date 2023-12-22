@@ -56,6 +56,7 @@ BOARD_KERNEL_CMDLINE += ufs_qcom.async_probe=1
 BOARD_KERNEL_CMDLINE += spi-geni-qcom.async_probe=1
 BOARD_KERNEL_CMDLINE += cnss_utils.async_probe=1
 BOARD_KERNEL_CMDLINE += cgroup_disable=pressure
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -124,8 +125,6 @@ BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # userdata.img
 TARGET_USERIMAGES_USE_F2FS := true
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
-BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
 # persist.img
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
@@ -533,7 +532,11 @@ else
 endif
 
 # DTBO partition definitions
-BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_DIR)/vintf/dtbo.img
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+    BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_DIR)/dtbo.img
+else
+    BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_DIR)/vintf/dtbo.img
+endif
 TARGET_FS_CONFIG_GEN := $(TARGET_BOARD_NAME_DIR)/config.fs
 
 # Kernel modules
@@ -551,7 +554,11 @@ else ifeq (,$(filter-out $(TARGET_BOOTLOADER_BOARD_NAME)_kernel_debug_hang, $(TA
 else ifeq (,$(filter-out $(TARGET_BOOTLOADER_BOARD_NAME)_kernel_debug_api, $(TARGET_PRODUCT)))
     KERNEL_MODULE_DIR := $(TARGET_KERNEL_DIR)/debug_api
 else
-    KERNEL_MODULE_DIR := $(TARGET_KERNEL_DIR)/vintf
+    ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+        KERNEL_MODULE_DIR := $(TARGET_KERNEL_DIR)
+    else
+        KERNEL_MODULE_DIR := $(TARGET_KERNEL_DIR)/vintf
+    endif
 endif
 
 # Copy kheaders.ko to vendor/lib/modules for VTS test
@@ -560,7 +567,9 @@ BOARD_VENDOR_KERNEL_MODULES += $(KERNEL_MODULE_DIR)/kheaders.ko
 KERNEL_MODULES := $(wildcard $(KERNEL_MODULE_DIR)/*.ko)
 KERNEL_MODULES_LOAD := $(strip $(shell cat $(firstword $(wildcard \
         $(KERNEL_MODULE_DIR)/modules.load \
-        $(TARGET_KERNEL_DIR)/vintf/modules.load))))
+        $(if $(filter userdebug eng,$(TARGET_BUILD_VARIANT)), \
+            $(TARGET_KERNEL_DIR)/vintf/modules.load,) \
+        $(TARGET_KERNEL_DIR)/modules.load))))
 
 # DTB
 BOARD_PREBUILT_DTBIMAGE_DIR := $(KERNEL_MODULE_DIR)

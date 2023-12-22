@@ -23,17 +23,17 @@ PRODUCT_VENDOR_MOVE_ENABLED := true
 TARGET_BOARD_PLATFORM := lito
 
 PRODUCT_SOONG_NAMESPACES += \
+    device/google/redbull \
     hardware/google/av \
     hardware/google/camera \
     hardware/google/interfaces \
     hardware/google/pixel \
-    device/google/redbull \
-    hardware/qcom/sm7250 \
+    hardware/qcom \
     system/chre/host/hal_generic \
     vendor/google/airbrush/floral \
     vendor/google/biometrics/face/florence \
     vendor/google/darwinn \
-    hardware/qcom/sm7250/display \
+    hardware/qcom/display \
     vendor/google/camera \
     vendor/qcom/sm7250 \
     vendor/google/interfaces \
@@ -43,7 +43,7 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Include GPS soong namespace
 PRODUCT_SOONG_NAMESPACES += \
-    hardware/qcom/sm7250/gps \
+    hardware/qcom/gps \
     vendor/qcom/sm7250/proprietary/gps \
     vendor/qcom/sm7250/codeaurora/location
 
@@ -236,9 +236,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml \
     frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.nxp.mifare.xml \
     frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
     frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
@@ -246,11 +243,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
     frameworks/native/data/etc/android.software.opengles.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml \
-    frameworks/native/data/etc/android.hardware.strongbox_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.strongbox_keystore.xml \
-    frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.uicc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.ese.xml \
-    frameworks/native/data/etc/android.hardware.se.omapi.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.ese.xml \
-    frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.uicc.xml
+    frameworks/native/data/etc/android.hardware.strongbox_keystore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.strongbox_keystore.xml 
 
 # Audio fluence, ns, aec property, voice and media volume steps
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -438,7 +431,6 @@ PRODUCT_PACKAGES += \
     NfcNci \
     Tag \
     SecureElement \
-    android.hardware.nfc-service.st \
     android.hardware.secure_element@1.2-service.st
 
 PRODUCT_COPY_FILES += \
@@ -764,14 +756,6 @@ ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
         persist.vendor.tcpdump.log.br_num=5
 endif
 
-# Preopt SystemUI.
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUIGoogle  # For internal
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI  # For AOSP
-
-# Compile SystemUI on device with `speed`.
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.systemuicompilerfilter=speed
-
 # Enable stats logging in LMKD
 TARGET_LMKD_STATS_LOG := true
 
@@ -830,16 +814,6 @@ PRODUCT_COPY_FILES += \
 # powerstats HAL
 PRODUCT_PACKAGES += \
     android.hardware.power.stats@1.0-service.pixel
-
-QTI_TELEPHONY_UTILS := qti-telephony-utils
-QTI_TELEPHONY_UTILS += qti_telephony_utils.xml
-PRODUCT_PACKAGES += $(QTI_TELEPHONY_UTILS)
-
-HIDL_WRAPPER := qti-telephony-hidl-wrapper
-HIDL_WRAPPER += qti_telephony_hidl_wrapper.xml
-HIDL_WRAPPER += qti-telephony-hidl-wrapper-prd
-HIDL_WRAPPER += qti_telephony_hidl_wrapper_prd.xml
-PRODUCT_PACKAGES += $(HIDL_WRAPPER)
 
 # Increment the SVN for any official public releases
 ifeq ($(PRODUCT_DEVICE_SVN_OVERRIDE),)
@@ -984,7 +958,6 @@ ifneq ($(PRODUCT_VENDOR_FREEZE_SYSTEM_BUILD),true)
 PRODUCT_PACKAGES += redbull_product_compatibility_matrix.xml
 endif
 # Set system properties identifying the chipset
-PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Qualcomm
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=SM7250
 
 #################################################################################
@@ -993,7 +966,7 @@ PRODUCT_VENDOR_PROPERTIES += ro.soc.model=SM7250
 #################################################################################
 
 # Display
--include hardware/qcom/sm7250/display/config/display-product.mk
+-include hardware/qcom/display/config/display-product.mk
 -include vendor/qcom/sm7250/proprietary/display/config/display-product-proprietary.mk
 
 # Security
