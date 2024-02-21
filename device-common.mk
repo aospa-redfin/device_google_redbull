@@ -818,7 +818,7 @@ PRODUCT_PACKAGES += \
 # Increment the SVN for any official public releases
 ifeq ($(PRODUCT_DEVICE_SVN_OVERRIDE),)
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.vendor.build.svn=75
+	ro.vendor.build.svn=76
 endif
 
 # Enable iwlan service logging for debug
