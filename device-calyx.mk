@@ -9,6 +9,10 @@ PRODUCT_SOONG_NAMESPACES += \
 $(call inherit-product, hardware/st/nfc/nfc_vendor_product.mk)
 TARGET_USES_ST_AIDL_NFC := true
 
+# Adaptive Charging
+PRODUCT_COPY_FILES += \
+    device/google/redbull/config/adaptivecharging.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/adaptivecharging.xml
+
 # EUICC
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.euicc.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/android.hardware.telephony.euicc.xml \
