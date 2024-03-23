@@ -474,12 +474,12 @@ TARGET_HAS_WIDE_COLOR_DISPLAY := true
 TARGET_HAS_HDR_DISPLAY := true
 
 # Vendor Interface Manifest
-DEVICE_MANIFEST_FILE := device/google/redbull/manifest.xml
+DEVICE_MANIFEST_FILE += device/google/redbull/manifest.xml
 ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
 # Omx is 32 bit only
 DEVICE_MANIFEST_FILE += device/google/redbull/manifest_omx.xml
 endif
-DEVICE_MATRIX_FILE := device/google/redbull/compatibility_matrix.xml
+DEVICE_MATRIX_FILE += device/google/redbull/compatibility_matrix.xml
 
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
